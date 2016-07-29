@@ -1,0 +1,510 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+<meta charset="utf-8">
+<title>Food For All</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+		<!-- jQueryMobileCSS - styling-->
+		<link rel="stylesheet" href="css/jqeury.mobile.theme.min.css" />
+				
+		<!-- jQueryMobile icons -->
+		<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />
+		
+		<!-- jQueryMobile core CSS -->
+		<link rel="stylesheet" href="css/jquery.mobile.min.css" />
+		
+		<!-- Owl stylesheet -->
+		<link rel="stylesheet" href="css/owl.carousel.css">
+		
+		<!-- Owl Theme -->
+		<link rel="stylesheet" href="css/owl.theme.css">
+				
+		<!-- NIGHTLY style -->
+		<link rel="stylesheet" href="css/nightly.css" />
+		
+		<link rel="stylesheet" href="css/project.css">
+				
+		<!-- Load Google Fonts -->
+		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900,300italic,400italic,600italic,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
+		
+		<!-- Load Font Awesome Icons -->
+		<link rel="stylesheet" href="css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/project.css">
+		
+		<!-- jQuery -->
+		<script src="js/jquery.min.js"></script>
+		
+		<!-- jQueryMobile -->
+		<script src="js/jquery.mobile.min.js"></script>
+		
+		<!-- Owl Carousel -->
+		<script src="js/owl.carousel.min.js"></script>
+		
+		<!-- NIGHTLY JS -->
+		<script src="js/nightly.js"></script>
+		
+		<!-- Google maps API -->
+    	<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+		
+		<!--// star rating plugin-specific resources //-->
+		<script src='star-rating/jquery.MetaData.js' type="text/javascript" language="javascript"></script>
+		<script src='star-rating/jquery.rating.js' type="text/javascript" language="javascript"></script>
+		<link href='star-rating/jquery.rating.css' type="text/css" rel="stylesheet"/>
+		
+		<!-- jAlert resources-->
+		<link rel='stylesheet' href='./src/jAlert-v3.css'>
+		<script src='./src/jAlert-v3.js'></script>
+		<script src='./src/jAlert-functions.js'></script>
+		
+		<style type="text/css">
+	.welcomeMsg{
+		font-size:120%;
+		font-weight:bold;
+		color:#004f99;
+		background-color:#e6e6ff;
+		text-align: center;
+	}
+	</style>
+	
+		<script type="text/javascript">
+		if(!(localStorage.length))
+	{
+		window.location.href="index.html";
+	}
+	function saveValue(obj)
+	{
+		var res=obj.split("_");
+		if(res[0]=="accept")
+		{
+			//update the recaccept field in the database
+			//send mail to the donor 
+			$.ajax({
+    url: "http://cmpe235sjsu.com/295B_version6/PHP/recactivity.php",
+    data: {'id':res[1],'decision':res[0]},
+    dataType: 'json',
+	type:"POST",
+    success: function(data) 
+    {  
+  		$(function(){
+                              $.jAlert({
+                                'title': 'Success!!',
+                                'content': 'Succesfully mailed the donor about donation accept',
+								'theme': 'green',
+                                'onClose': function(){window.location.href="recactivitypage.html";},
+                                  });
+                              });
+                             
+		
+	},
+    error : function()
+    {
+        alert("Error in mailing the donor");
+    }
+    });	
+		
+		}
+		else //if the recipient chooses to reject the request
+		{
+			
+			$.ajax({
+    url: "http://cmpe235sjsu.com/295B_version6/PHP/recactivity.php",
+    data: {'id':res[1],'decision':res[0]},
+    dataType: 'json',
+	type:"POST",
+    success: function(data) 
+    {  
+  		$(function(){
+                              $.jAlert({
+                                'title': 'Info!!',
+                                'content': 'Mailed the donor about donation rejection',
+								'theme': 'blue',
+                                'onClose': function(){window.location.href="recactivitypage.html";},
+                                  });
+                              });
+                              
+		
+	},
+    error : function()
+    {
+        alert("Error in deleting the field");
+    }
+    });	
+			
+		}
+	}
+
+//this function will call recGetDetails.php to retrieve vol email and vol name in that row	
+function getDetails(x){
+	console.log("hitting get details func!");
+	var res=x.split("_");
+	console.log(res);
+	$.ajax({
+		url: "http://cmpe235sjsu.com/295B_version6/PHP/recGetDetails.php",
+		data: {'id1':res[1],'todo':res[0]},
+		dataType: 'json',
+		type:"POST",
+		success: function(data) 
+		{                     
+			console.log(data);
+			document.getElementById("vname").value=data.vname;
+			document.getElementById("vemail").value=data.vmail;
+			document.getElementById("reqId").value=res[1];
+		},
+		error : function()
+		{
+			alert("Some error");
+		}
+    })
+}
+ $(document).ready(function($) {
+                            
+                var time = 8; // time in seconds
+                 
+                  var $progressBar,
+                      $bar, 
+                      $elem, 
+                      isPause, 
+                      tick,
+                      percentTime;
+                 
+              
+                    $("#main-slider").owlCarousel({   
+                          
+                          slideSpeed : 700,
+                          paginationSpeed : 700,
+                          rewindSpeed : 1500,
+                          singleItem : true,
+						  pagination : false,
+                          lazyLoad : true,
+                          autoPlay : 10000,
+                          stopOnHover : true,
+                          navigation: false,
+                          navigationText: [
+                            "<i class='owl-nav-left fa fa-angle-left'></i>",
+                            "<i class='owl-nav-right fa fa-angle-right'></i>"
+                            ],
+                          afterInit : progressBar,
+                          afterMove : moved,
+                          startDragging : pauseOnDragging
+                       });
+                 
+                 
+                    function progressBar(elem){
+                      $elem = elem;
+                      buildProgressBar();
+                      start();
+                    }
+                 
+                 
+                    function buildProgressBar(){
+                      $progressBar = $("<div>",{
+                        id:"progressBar"
+                      });
+                      $bar = $("<div>",{
+                        id:"bar"
+                      });
+                      $progressBar.append($bar).prependTo($elem);
+                    }
+                 
+                    function start() {
+                      
+                      percentTime = 0;
+                      isPause = false;
+                      
+                      tick = setInterval(interval, 10);
+                    };
+                 
+                    function interval() {
+                      if(isPause === false){
+                        percentTime += 1 / time;
+                        $bar.css({
+                           width: percentTime+"%"
+                         });
+                         
+                        if(percentTime >= 100){
+                        
+                          $elem.trigger('owl.next')
+                        }
+                      }
+                    }
+                 
+                    function pauseOnDragging(){
+                      isPause = true;
+                    }
+                 
+                    function moved(){
+                    
+                      clearTimeout(tick);
+                      start();
+                    }
+                 
+                    
+                     $elem.on('mouseover',function(){
+                       isPause = true;
+                     })
+                     $elem.on('mouseout',function(){
+                       isPause = false;
+                     })
+					 
+					 
+				var data=localStorage.getItem("email");
+    $.ajax({
+    url: "http://cmpe235sjsu.com/295B_version6/PHP/saveimage_recipient.php",
+    data: {'email':data},
+    dataType: 'json',
+	type:"POST",
+    success: function(data) 
+    {  
+  		
+		document.getElementById("myImage").src=data.src;
+		console.log(data.src);
+		$('#welcomeMsg').html(data.name+"'s HOME PAGE").show();
+		},
+    error : function()
+    {
+        //$(this).dialog("close");
+    }
+    });				 
+					 
+            })
+			
+	$(function() {
+
+$("#view-history").click(function(){
+var value=localStorage.getItem("email");
+var main=document.getElementById('tab');
+main.innerHTML='';
+/*var table = document.createElement('table');
+table.setAttribute("data-role","table");
+table.setAttribute("data-mode","columntoggle");
+table.setAttribute("class","ui-responsive");*/
+ var service_table = $('<table data-role="table"  data-mode="columntoggle" class="ui-responsive table-stroke" id="service"></table>');
+  var service_tr_th=$("<thead></thead>");
+  var rows=$("<tr></tr>");
+   var service_tbody = $('<tbody></tbody>');
+    var service_tr,service_name_td;
+  var item;
+$.ajax({
+    url: "http://cmpe235sjsu.com/295B_version6/PHP/recactivity.php",
+    type: "POST",
+    data:{'email':value} ,
+    dataType: 'json',
+    success: function(data) 
+    {  
+		if(data.length==0)
+		{
+			main.innerHTML="<strong>No pending delivery details avilable currently</strong>";
+		}
+		else
+		{
+			var keys=Object.keys(data[0]);
+			for(var i=1;i<keys.length;i++)
+			{
+				item=$("<th data-priority="+i+">"+keys[i]+"</th>");
+				//item=$("<th>"+keys[i]+"</th>");
+				item.appendTo(rows);
+			}
+			item=$("<th data-priority="+i+1+">Accept/Reject</th>");item.appendTo(rows);
+			item=$("<th data-priority="+i+2+">Rate Volunteer</th>");
+			//item=$("<th>Accept/Reject</th>");item.appendTo(rows);
+			//item=$("<th>Rate the Volunteer</th>");
+			item.appendTo(rows);
+			rows.appendTo(service_tr_th);
+			console.log(data);
+			for(var i=0;i<data.length;i++)
+			{
+				service_tr = $('<tr></tr>');
+				console.log("i am heretoo");
+				//console.log(data);
+				for(var j=1;j<keys.length;j++)
+				{
+				console.log("i am here");
+				//console.log(data[i].donorname);
+				service_name_td = $('<td>' + data[i][keys[j]] + '</td>');
+				service_name_td.appendTo(service_tr);
+				}
+				//accept and reject buttons
+				service_name_td = $("<td><button data-inline='true' data-role='none' class='special-button nightly-button' data-theme='b' onClick='saveValue(id);' id=accept_"+data[i].requestid+"><i class='fa fa-check'></i>Accept</button><br/><br/><button data-inline='true' data-role='none' class='special-button nightly-button' data-theme='b' onClick='saveValue(id);' id=reject_"+data[i].requestid+"><i class='fa fa-times'></i>Reject</button></td>");
+				service_name_td.appendTo(service_tr);
+			
+				//star rating display
+				service_name_td = $("<td><a href='#starRate' data-rel='popup' data-transition='pop' class='special-button nightly-button' data-theme='b' onClick='getDetails(id);' id=rate_"+data[i].requestid+"><i class='fa fa-star'></i>Rate</a><p id=done_"+data[i].requestid+" style='display:none;'><strong>DONE</strong><p></td>");
+				service_name_td.appendTo(service_tr);
+				service_tr.appendTo(service_tbody);
+			}
+		
+			service_tr_th.appendTo(service_table);
+		 	service_tbody.appendTo(service_table);
+			service_table.appendTo($("#tab"));
+			service_table.table();
+		
+        }		
+     },
+    error : function()
+    {
+        alert("error");
+    }
+    }); 
+
+return false;     
+});
+
+});
+
+	<!-- AJAX to send rating pop up details to backend -->
+	$(function() {
+					$("#ratingForm").submit(function(){
+					console.log("entered AJAX of rating pop up");
+					var requestId= document.getElementById("reqId").value;
+					console.log(requestId);
+					var data = $('#ratingForm').serialize();
+					console.log(data);
+					$.ajax({
+						url: "http://cmpe235sjsu.com/295B_version6/PHP/addratinginfoByRec.php",
+						type: "POST",
+						data: data,
+						dataType: 'json',
+						success: function(data) 
+						{  
+							if (data.status == 401)
+							{
+								console.log("401: could not add rating properly");
+								 
+							}
+							else if(data.status == 200)
+							{		
+								console.log("200: success");
+								$("#starRate").popup("close");
+								document.getElementById("rate_"+requestId+"").style.display="none";
+								document.getElementById("done_"+requestId+"").style.display="block";
+
+							}
+						},
+						error : function()
+						{
+							console.log("error!!");
+						}
+					}); 
+					return false; 
+					});
+				});
+			</script>
+
+</head> 
+<body>
+<div data-role="page" id="pageActivity" data-theme='b'>
+<div data-role="panel" data-display="push" id="sidebar" data-theme="a">
+	             <ul data-role="listview">
+	                     	<li data-icon='false'><a data-ajax="false" href="volactivitypage.html"><i class="fa fa-home fa-fw"></i>Home</a></li>
+							<li data-icon='false'><a data-ajax="false" href="about.html"><i class="fa fa-file-o fa-fw"></i>About</a></li>
+							<li data-icon='false' class="menu-item-has-children"><a href="#"><i class="fa fa-exchange fa-fw"></i>Contact Us</a>
+								<ul data-role="listview" class="sub-menu">
+									<li data-icon='false'><a data-ajax="false" href="mailto:cmpe295asjsu@gmail.com"><i class="fa fa-envelope fa-fw"></i>Email</a></li>
+									<li data-icon='false'><a data-ajax="false" href="tel:4088169958"><i class="fa fa-phone fa-fw"></i>Call</a></li>
+								</ul>
+							</li>
+							<li data-icon='false'><a data-ajax="false" href="logout.html"><i class="fa fa-key fa-fw"></i>Logout</a></li>
+				</ul>                         
+	         </div>
+	         <!-- #right-sidebar -->
+	         <div data-role="panel" data-display="push" id="sidebar-right" data-position="right" data-theme="a" class="theme-b">
+			 <img id = "myImage" src="" class="sidebarimage" alt="noimageselected" ></img>
+	            <ul data-role="listview">
+					
+					<li data-icon='false'><a data-ajax="false" href="settings_recipient.html"><i class="fa fa-gear fa-fw"></i>Settings</a></li>	
+					
+				</ul>
+	         </div> 
+			 
+<!--HEADER OF PAGE-->
+		
+	         <div data-role="header" data-tap-toggle="false" data-theme='b'>
+	             <a href='#sidebar' data-role="none"><img src="img/menu-icon.png" alt="sidebar" id="header-menu-icon" /></a>
+	             <h1 class="header-title">Food For All</h1>
+				 <a href='#sidebar-right' data-role="none" id="a-right-sidebar"><img src="img/right-menu-icon.png" alt="sidebar" id="header-search-icon" /></a>
+	             
+	         </div>
+<!-- CONTENT of PAGE-->
+<div data-role="content">
+		<div data-role="none" id="main-slider" class="owl-carousel">
+                    <div class="item">
+                      <img src="img/assets/blog-1.jpg" alt="pic1">
+                      <div class="text">
+                          <h1>Food for all</h1>
+                          <h2>Let's join hands to help prevent hunger</h2>
+                      </div>
+                    </div>
+                    <div class="item">
+                      <img src="img/assets/blog-2.jpg" alt="pic2">
+                      <div class="text">
+                          <h1></h1>
+                          <h2>Stop food wastage and help the hungry!</h2>
+                      </div>
+                    </div>
+    
+                    <div class="item">
+                      <img src="img/assets/blog-3.jpg" alt="pic3">
+                      <div class="text">
+                          <h1>Food for all</h1>
+                          <h2>Donate or Volunteer to transfer food</h2>
+                      </div>
+                    </div>
+    
+                    <div class="item">
+                      <img src="img/assets/blog-4.jpg" alt="pic4">
+                      <div class="text">
+                          <h1>Food for all</h1>
+                          <h2>Channelising excess food to help a needy</h2>
+                      </div>
+                    </div>
+                
+</div>
+<div id="welcomeMsg" class="welcomeMsg"></div><br/><br/>
+<button id="view-history" data-role="none" class="nightly-button" data-theme="b" ><i class="fa fa-history"></i>View delivery history</button>
+<div id="tab" style="width: 100%; overflow: auto"></div>
+</div>
+<!--FOOTER OF PAGE-->
+ <div data-role="footer" data-theme="none" data-border="false">
+	<div style="text-align:center;">
+				<img src="img/assets/logo.jpg" alt="logo" width="145" />
+				</div>
+            </div>
+			<div data-role="footer" data-position="fixed" data-border="false" data-tap-toggle="false">
+            	<div data-role="navbar">
+            		<ul>
+            			<li><a href="contact.php"><i class="fa fa-map-marker fa-fw"></i><span>Map</span></a></li>
+            			<li><a href="tel:123456789"><i class="fa fa-phone fa-fw"></i><span>Call</span></a></li>
+            			<li><a href="mailto:cmpe295asjsu@gmail.com"><i class="fa fa-envelope fa-fw"></i><span>E-mail</span></a></li>
+            			<li><a href="https://www.facebook.com/lukepostulka"><i class="fa fa-facebook fa-fw"></i><span>Facebook </span></a></li>
+            			<li><a href="https://twitter.com/lukepostulka"><i class="fa fa-twitter fa-fw"></i><span>Twitter</span></a></li>
+            		</ul>
+            	</div>
+            </div>
+	<!--pop up starts here -->
+<div data-role="popup" id="starRate" data-theme="a">
+	<form id="ratingForm" method="POST">
+		<div style="padding:5px 10px;">
+		<div id="starRating" name="starRating" data-role="none">
+			<input name="star2" type="radio" class="star {split:2}" value="0.5"/>
+			<input name="star2" type="radio" class="star {split:2}" value="1"/>
+			<input name="star2" type="radio" class="star {split:2}" value="1.5"/>
+			<input name="star2" type="radio" class="star {split:2}" value="2"/>
+			<input name="star2" type="radio" class="star {split:2}" value="2.5"/>
+			<input name="star2" type="radio" class="star {split:2}" value="3"/>
+			<input name="star2" type="radio" class="star {split:2}" value="3.5"/>
+			<input name="star2" type="radio" class="star {split:2}" value="4"/>
+			<input name="star2" type="radio" class="star {split:2}" value="4.5"/>
+			<input name="star2" type="radio" class="star {split:2}" value="5"/>
+		</div>
+		<br/>
+		<input type="hidden" id="vname" name="vname" />
+		<input type="hidden" id="vemail" name="vemail" />
+		<input type="hidden" id="reqId" name="reqId" />
+		<button type="submit" data-role="none" class="special-button nightly-button" data-mini="true" data-theme="b"><i class="fa fa-sign-in"></i>Submit Rating</button>
+		</div>
+	</form>	
+</div>	
+</div>
+</body>
+</html>

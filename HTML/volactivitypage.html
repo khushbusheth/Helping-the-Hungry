@@ -1,0 +1,415 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+<meta charset="utf-8">
+<title>Food For All</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    
+		<!-- jQueryMobileCSS - styling-->
+		<link rel="stylesheet" href="css/jqeury.mobile.theme.min.css" />
+				
+		<!-- jQueryMobile icons -->
+		<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />
+		
+		<!-- jQueryMobile core CSS -->
+		<link rel="stylesheet" href="css/jquery.mobile.min.css" />
+		
+		<!-- Owl stylesheet -->
+		<link rel="stylesheet" href="css/owl.carousel.css">
+		
+		<!-- Owl Theme -->
+		<link rel="stylesheet" href="css/owl.theme.css">
+				
+		<!-- NIGHTLY style -->
+		<link rel="stylesheet" href="css/nightly.css" />
+				
+		<!-- Load Google Fonts -->
+		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900,300italic,400italic,600italic,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
+		
+		<!-- Load Font Awesome Icons -->
+		<link rel="stylesheet" href="css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/project.css">
+		
+		<!-- jQuery -->
+		<script src="js/jquery.min.js"></script>
+		
+		<!-- jQueryMobile -->
+		<script src="js/jquery.mobile.min.js"></script>
+		
+		<!-- Owl Carousel -->
+		<script src="js/owl.carousel.min.js"></script>
+		
+		<!-- NIGHTLY JS -->
+		<script src="js/nightly.js"></script>
+		
+		<!-- Google maps API -->
+    	<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+		
+		<!-- jAlert resources-->
+		<link rel='stylesheet' href='./src/jAlert-v3.css'>
+		<script src='./src/jAlert-v3.js'></script>
+		<script src='./src/jAlert-functions.js'></script>
+		
+		<style type="text/css">
+	.welcomeMsg{
+		font-size:120%;
+		font-weight:bold;
+		color:#004f99;
+		background-color:#e6e6ff;
+		text-align: center;
+	}
+	</style>
+	
+		<script type="text/javascript">
+		if(!(localStorage.length))
+	{
+		window.location.href="index.html";
+	}
+ $(document).ready(function($) {
+                            
+                var time = 8; // time in seconds
+                 
+                  var $progressBar,
+                      $bar, 
+                      $elem, 
+                      isPause, 
+                      tick,
+                      percentTime;
+                 
+              
+                    $("#main-slider").owlCarousel({   
+                          
+                          slideSpeed : 700,
+                          paginationSpeed : 700,
+                          rewindSpeed : 1500,
+                          singleItem : true,
+						  pagination : false,
+                          lazyLoad : true,
+                          autoPlay : 10000,
+                          stopOnHover : true,
+                          navigation: false,
+                          navigationText: [
+                            "<i class='owl-nav-left fa fa-angle-left'></i>",
+                            "<i class='owl-nav-right fa fa-angle-right'></i>"
+                            ],
+                          afterInit : progressBar,
+                          afterMove : moved,
+                          startDragging : pauseOnDragging
+                       });
+                 
+                 
+                    function progressBar(elem){
+                      $elem = elem;
+                      buildProgressBar();
+                      start();
+                    }
+                 
+                 
+                    function buildProgressBar(){
+                      $progressBar = $("<div>",{
+                        id:"progressBar"
+                      });
+                      $bar = $("<div>",{
+                        id:"bar"
+                      });
+                      $progressBar.append($bar).prependTo($elem);
+                    }
+                 
+                    function start() {
+                      
+                      percentTime = 0;
+                      isPause = false;
+                      
+                      tick = setInterval(interval, 10);
+                    };
+                 
+                    function interval() {
+                      if(isPause === false){
+                        percentTime += 1 / time;
+                        $bar.css({
+                           width: percentTime+"%"
+                         });
+                         
+                        if(percentTime >= 100){
+                        
+                          $elem.trigger('owl.next')
+                        }
+                      }
+                    }
+                 
+                    function pauseOnDragging(){
+                      isPause = true;
+                    }
+                 
+                    function moved(){
+                    
+                      clearTimeout(tick);
+                      start();
+                    }
+                 
+                    
+                     $elem.on('mouseover',function(){
+                       isPause = true;
+                     })
+                     $elem.on('mouseout',function(){
+                       isPause = false;
+                     })
+					 
+					 
+				var data=localStorage.getItem("email");
+    $.ajax({
+    url: "http://cmpe235sjsu.com/295B_version6/PHP/saveimage_volunteer.php",
+    data: {'email':data},
+    dataType: 'json',
+	type:"POST",
+    success: function(data) 
+    {  
+  		
+		document.getElementById("myImage").src=data.src;
+		//console.log(data.src);
+		$('#welcomeMsg').html(data.name+"'s HOME PAGE").show();
+		},
+    error : function()
+    {
+        //$(this).dialog("close");
+    }
+    });				 
+					 
+})
+			
+			
+	 //  AJAX call to get data for notification
+    var details,msg;
+
+    var reqids =[];
+    var i=0;
+    var icount;
+
+    var vemail = localStorage.getItem("email");
+
+    $.ajax({
+
+            url: "http://cmpe235sjsu.com/295B_version6/PHP/reqNotify.php",
+
+            type: "POST",
+
+            dataType: 'json',
+
+            data: {
+
+                'email': vemail
+
+            },
+
+            success: function (msg) {
+
+                details = msg;
+                 
+                console.log(details);
+
+                if (details.data.length > 0) {
+
+                    $.each(details.data, function (key, value) {
+
+                      reqids[i] = value.requestnum;
+                      console.log("Req is inside loop"+reqids[i]);
+                      //temp = value.requestnum;
+
+                      //localStorage.setItem("requestid",value.requestnum);
+                      $('#ralert').append('<div class="div-box"><p><strong>Donors Address='
+                       + value.donoraddreess + 
+                       '</br> Donors type of food = ' 
+                       + value.typefood + 
+                       '</br> Donors preferred time = ' 
+                       + value.pickuptime + 
+                       '</strong></p> <input type="button"  id="accepted" onclick="acceptReq('+reqids[i]+')" class="nightly-button" data-theme="c" value=Accept> ' + " " + '<input type="button" id ="reject" class="nightly-button" data-theme="c" value=Reject onclick="rejectReq('+reqids[i]+')" ></div>');
+
+                                  
+                       i++;
+
+                    });
+
+                  }
+
+                else {
+
+                    $('#ralert').append('<p>You have no requests for food donations. </p>');
+                    //document.write('<a href="' + location + '">Link text</a>'); 
+                   
+
+                }
+
+            }
+
+        });
+		
+//taking care of accept buttun
+function acceptReq(acceptedid)
+{
+  var i=0;
+   
+  console.log("InsideAccept:"+acceptedid);
+
+  localStorage.setItem("acceptedrequestid",acceptedid);
+
+  location.href ="volReqDetails.html";      
+}    
+
+// takes care of reject button
+function rejectReq(rejectedid)
+{
+  var emailid = localStorage.getItem("email");
+  $.ajax({
+    url: "http://cmpe235sjsu.com/295B_version6/PHP/reject.php",
+    type: "POST",
+    data: {email:emailid,rejID:rejectedid},
+    dataType: 'json',
+    success:function(data){
+
+      location.href="volactivitypage.html";
+    },
+    error : function(){
+
+    }
+  });
+}
+<!-- display rating in right panel -->
+			
+function getRating()
+{
+	console.log(document.getElementById('ratingdiv').style.display);
+	if(document.getElementById('ratingdiv').style.display=='none')
+	{
+		document.getElementById('ratingdiv').style.display='block';
+		console.log("ready");
+	var data=localStorage.getItem("email");
+	$.ajax({
+		url: "http://cmpe235sjsu.com/295B_version6/PHP/showratings.php",
+		data: {'email':data},
+    type:"POST",
+		dataType: 'json',
+		success:function(data){
+
+			//alert(data);
+				$('#ratingdiv').html(data.rating).show();
+		},
+		error : function(){
+			console.log("error");
+		}
+	});
+	}
+	else{
+		document.getElementById('ratingdiv').style.display='none';
+	}
+	return false;
+}
+			</script>
+
+</head> 
+<body>
+<div data-role="page" id="pageActivity" data-theme='b'>
+<div data-role="panel" data-display="push" id="sidebar" data-theme="a">
+	             <ul data-role="listview">
+	                     	<li data-icon='false'><a data-ajax="false" href="volactivitypage.html"><i class="fa fa-home fa-fw"></i>Home</a></li>
+							<li data-icon='false'><a data-ajax="false" href="about.html"><i class="fa fa-file-o fa-fw"></i>About</a></li>
+							<li data-icon='false'><a data-ajax="false" href="volunteerhistory.html"><i class="fa fa-clock-o fa-fw"></i>History</a></li>
+							<li data-icon='false' class="menu-item-has-children"><a href="#"><i class="fa fa-exchange fa-fw"></i>Contact Us</a>
+								<ul data-role="listview" class="sub-menu">
+									<li data-icon='false'><a data-ajax="false" href="mailto:cmpe295asjsu@gmail.com"><i class="fa fa-envelope fa-fw"></i>Email</a></li>
+									<li data-icon='false'><a data-ajax="false" href="tel:4088169958"><i class="fa fa-phone fa-fw"></i>Call</a></li>
+								</ul>
+							</li>
+						
+							<li data-icon='false' class="menu-item-has-children"><a href="#"><i class="fa fa-user fa-fw"></i>Tell Friends</a>
+								<ul data-role="listview" class="sub-menu">
+									<li data-icon='false'><a data-ajax="false" href="#"><i class="fa fa-facebook fa-fw"></i>Facebook</a></li>
+									<li data-icon='false'><a data-ajax="false" href="#"><i class="fa fa-twitter fa-fw"></i>Twitter</a></li>
+								</ul>						
+							</li>
+							<li data-icon='false'><a data-ajax="false" href="logout.html"><i class="fa fa-key fa-fw"></i>Logout</a></li>
+				</ul>                         
+	         </div>
+	         <!-- #right-sidebar -->
+	         <div data-role="panel" data-display="push" id="sidebar-right" data-position="right" data-theme="a" class="theme-b">
+			 <img id = "myImage" src="" class="sidebarimage" alt="noimageselected" ></img>
+	            <ul data-role="listview">
+					<li data-icon='false'><a data-ajax="false" onclick="return getRating();"><i class="fa fa-trophy"></i>My Score</a></li>
+						<div class="ratingdiv" id="ratingdiv" style="display:none; font-weight:bold;" data-theme="a"></div>
+					<br/>
+					<li data-icon='false'><a data-ajax="false" href="settings_volunteer.html"><i class="fa fa-gear fa-fw"></i>Settings</a></li>	
+					
+				</ul>
+	         </div> 
+			 
+<!--HEADER OF PAGE-->
+		
+	         <div data-role="header" data-tap-toggle="false" data-theme='b'>
+	             <a href='#sidebar' data-role="none"><img src="img/menu-icon.png" alt="sidebar" id="header-menu-icon" /></a>
+	             <h1 class="header-title">Food For All</h1>
+				 <a href='#sidebar-right' data-role="none" id="a-right-sidebar"><img src="img/right-menu-icon.png" alt="sidebar" id="header-search-icon" /></a>
+	             
+	         </div>
+<!-- CONTENT of PAGE-->
+<div data-role="content">
+		<div data-role="none" id="main-slider" class="owl-carousel">
+                    <div class="item">
+                      <img src="img/assets/blog-1.jpg" alt="pic1">
+                      <div class="text">
+                          <h1>Food for all</h1>
+                          <h2>Let's join hands to help prevent hunger</h2>
+                      </div>
+                    </div>
+                    <div class="item">
+                      <img src="img/assets/blog-2.jpg" alt="pic2">
+                      <div class="text">
+                          <h1></h1>
+                          <h2>Stop food wastage and help the hungry!</h2>
+                      </div>
+                    </div>
+    
+                    <div class="item">
+                      <img src="img/assets/blog-3.jpg" alt="pic3">
+                      <div class="text">
+                          <h1>Food for all</h1>
+                          <h2>Donate or Volunteer to transfer food</h2>
+                      </div>
+                    </div>
+    
+                    <div class="item">
+                      <img src="img/assets/blog-4.jpg" alt="pic4">
+                      <div class="text">
+                          <h1>Food for all</h1>
+                          <h2>Channelising excess food to help a needy</h2>
+                      </div>
+                    </div>
+                </div>	
+				<div id="welcomeMsg" class="welcomeMsg"></div>
+				
+        <h5><a href="acceptedreq.html" class="ui-btn ui-btn-inline ui-corner-all ui-shadow"> My Accepted Request </a> </h5>
+				    <!--content for notification starts here -->
+
+     <div data-role="none"  id="ralert">
+
+        <!--<p>THIS IS DUMMY DATA</p>-->
+
+    </div>
+</div>
+<!--FOOTER OF PAGE-->
+ <div data-role="footer" data-theme="none" data-border="false">
+	<div style="text-align:center;">
+				<img src="img/assets/logo.jpg" alt="logo" width="145" />
+				</div>
+            </div>
+			<div data-role="footer" data-position="fixed" data-border="false" data-tap-toggle="false">
+            	<div data-role="navbar">
+            		<ul>
+            			<li><a href="contact.php"><i class="fa fa-map-marker fa-fw"></i><span>Map</span></a></li>
+            			<li><a href="tel:123456789"><i class="fa fa-phone fa-fw"></i><span>Call</span></a></li>
+            			<li><a href="mailto:cmpe295asjsu@gmail.com"><i class="fa fa-envelope fa-fw"></i><span>E-mail</span></a></li>
+            			<li><a href="https://www.facebook.com/lukepostulka"><i class="fa fa-facebook fa-fw"></i><span>Facebook </span></a></li>
+            			<li><a href="https://twitter.com/lukepostulka"><i class="fa fa-twitter fa-fw"></i><span>Twitter</span></a></li>
+            		</ul>
+            	</div>
+            </div>
+</body>
+</html>

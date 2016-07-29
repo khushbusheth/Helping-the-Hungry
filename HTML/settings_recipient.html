@@ -1,0 +1,581 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+    <title>Settings</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+		<!-- jQueryMobileCSS - styling-->
+		<link rel="stylesheet" href="css/jqeury.mobile.theme.min.css" />
+		
+		<!-- jQueryMobile icons -->
+		<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />
+
+		<!-- jQueryMobile core CSS -->
+		<link rel="stylesheet" href="css/jquery.mobile.min.css" />
+		
+		<!-- NIGHTLY style -->
+		<link rel="stylesheet" href="css/nightly.css" />
+		
+		<!-- Load Google Fonts -->
+		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic,700italic' rel='stylesheet' type='text/css'>
+		
+		<!-- Load Font Awesome Icons -->
+		<link rel="stylesheet" href="css/font-awesome.min.css">
+		
+		<link rel="stylesheet" href="css/project.css">
+
+		<!-- jQuery -->
+		<script src="js/jquery.min.js"></script>
+		
+		<!-- jQueryMobile -->
+		<script src="js/jquery.mobile.min.js"></script>
+		
+		<!-- NIGHTLY JS -->
+		<script src="js/nightly.js"></script>
+		
+        <script type="text/javascript" src="jquery.form.js"></script>
+ 
+
+    </head>
+	<script type="text/javascript">
+	if(!(localStorage.length))
+	{
+		window.location.href="index.html";
+	}
+	var num=0,num_1=0,num_2=0;
+	$( document ).ready(function() {
+	console.log("ready");
+	var data=localStorage.getItem("email");
+    $.ajax({
+    url: "http://cmpe235sjsu.com/295B_version6/PHP/settings_recipient.php",
+	type:"POST",
+   data: {email:data},
+    dataType: 'json',
+    success: function(data) 
+    {  
+  		document.getElementById('fullname').value=data.fullname;
+		document.getElementById('email').value=data.email;
+		document.getElementById('address').value=data.address;
+		document.getElementById('city').value=data.City;
+		document.getElementById('password').value=data.password;
+		document.getElementById('address').value=data.address;
+		document.getElementById('website').value=data.website;
+		document.getElementById("myImage").src=data.image;
+		console.log(data.src);
+		var start=document.getElementById('startTime');
+		data.starthrs=data.starthrs.substring(0,5);
+		var options1=start.options.length;
+		for(var i=0;i<options1;i++)
+		{
+			if(start.options[i].value==data.starthrs)
+			{
+				start.options[i].selected = true;
+				//start.value=start.options[i].value;
+				start.selectedIndex=i;
+				break;
+			}
+		}
+		var end=document.getElementById('endTime');
+		var options1=end.options.length;
+		data.endhrs=data.endhrs.substring(0,5);
+		console.log(data.endhrs);
+		for(var i=0;i<options1;i++)
+		{
+			
+			if(end.options[i].value==data.endhrs)
+			{
+				console.log("hit");
+				end.options[i].selected = true;
+				//end.value=end.options[i].value;
+				end.selectedIndex=i;
+		        break;
+			}
+		}
+		var ddl = document.getElementById('state');
+		var opts = ddl.options.length;
+		for (var i=0; i<opts; i++){
+		if (ddl.options[i].value == data.State){
+		
+        ddl.options[i].selected = true;
+		var v=ddl.options[i].value;
+		$('#state').val(v).selectmenu("refresh");
+		
+		ddl.selectedIndex=i;
+		console.log(data.State);
+		console.log(ddl.options[i]);
+        break;
+		}
+		}
+		document.getElementById('zip').value=data.zip;
+		var elem=document.getElementsByName('typeFood[]');
+		var res=data.typefood;
+		console.log(res);
+		res=res.slice(1,-1);
+		console.log(res);
+		res=res.split(",");
+		for(var j=0;j<res.length;j++)
+		{
+			res[j]=res[j].slice(1,-1);
+		}
+		
+		for(var i=0;i<elem.length;i++)
+		{
+			for(var j=0;j<res.length;j++)
+				{
+					
+					//console.log(res[j]);
+					//console.log("food"+elem[i].value);
+					if(elem[i].value == res[j])
+					{	
+						console.log("hit"+res[j]);
+						//elem[i].checked="checked";
+						var d=i+1;
+						var c="checkbox-"+d;
+						console.log(c);
+						document.getElementById(c).checked=true;
+						
+    $('#'+c).attr('checked', 'checked').checkboxradio('refresh');
+
+						
+					}
+				}
+		}
+		
+		
+     },
+    error : function()
+    {
+        //$(this).dialog("close");
+    }
+    }); 
+});
+
+$(function() {
+
+$("#updateform").submit(function(){
+localStorage.setItem("email",document.getElementById('email').value);
+var data = $('#updateform').serialize();
+$.ajax({
+    url: (num==0)?"http://cmpe235sjsu.com/295B_version6/PHP/settings_recipient.php": "settings_recipient.html",
+    type: "POST",
+    data: data,
+    dataType: 'json',
+    success: function(data) 
+    {  
+		if(data.status==401)
+		{
+		$('#displayerror').html(data.msg).show(); 
+		}
+		else
+		{
+				$('#displayerror').hide();
+				$('#displaycorrect').html(data.msg).show(); 
+		}
+  		
+     },
+    error : function()
+    {
+        //$(this).dialog("close");
+    }
+    }); 
+    return false; 
+});
+});
+function changefocus()
+{
+	document.getElementById('zip').readOnly=false;
+	document.getElementById('city').readOnly=false;
+	document.getElementById('city').focus();
+	document.getElementById('state').readOnly=false;
+	
+}
+function validate(obj)
+{
+			var pass=document.getElementById('password').value;
+			var valid1=/[#@!$%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\"]+/;
+			var  valid2=/[a-z]+/;
+			var  valid3=/[0-9]+/;
+			var valid4=/[A-Z]+/;	
+			if(obj.id=="endTime" || obj.id== "startTime"){
+			 var time1=document.getElementById("endTime");
+				var time_1=time1.options[time1.selectedIndex].value;
+				var time2=document.getElementById("startTime");
+				var time_2=time2.options[time2.selectedIndex].value;
+				if(time_2>time_1) //start time greater than end time
+				{
+						document.getElementById("displayerror").style.display= "";
+						document.getElementById("displayerror").innerHTML="Start time cannot be greater than the end time";
+						num_1=1;
+				}
+				else
+				{
+					document.getElementById("displayerror").style.display= "none";
+					num_1=0;
+					
+				} 
+			}
+			if(obj.id=="password"){
+			 if((valid1.test(pass)) && (valid2.test(pass)) && (valid3.test(pass)) && (valid4.test(pass)))
+			 {
+				num_2=0;
+				document.getElementById("displayerror").style.display= "none";
+				return true;
+				
+				
+			 }
+			 else
+			 {
+			 num_2=1;
+			document.getElementById("displayerror").style.display= "";
+			 document.getElementById("displayerror").innerHTML= "Password must contain atleast: one capital alphabet, one small alphabet ,one number and one special character";
+			  return false;
+			 }
+			 }
+			 num=num_1 || num_2;
+}
+function imageupload()
+{
+	if(document.getElementById('maindiv').style.display=='none')
+	{
+	document.getElementById('maindiv').style.display='block';
+	//$(document).ready(function() {
+	var data=localStorage.getItem("email");
+	var options = {
+		beforeSubmit:  showRequest,
+		success:       showResponse,
+		url:       'http://cmpe235sjsu.com/295B_version6/PHP/saveimage_recipient.php',  // your upload script
+		method:   'POST',
+		data:	{email:data},
+		dataType:  'json'
+	};
+	$('#imageform').submit(function() {
+		$('#message').html('');
+		$(this).ajaxSubmit(options);
+		return false;
+	});
+//}); 
+function showRequest(formData, jqForm, options) { //formdata is equivalent to the multipart /form-data and jqForm is a plugin which is an efficient way to submit the form data to the back end.
+	var fileToUploadValue = $('input[name=fileToUpload]').fieldValue();
+	if (!fileToUploadValue[0]) {
+		$('#message').html('Please select a file.');
+		return false;
+	} 
+	return true;
+} 
+function showResponse(data, statusText)  {
+	if (statusText == 'success') {
+		
+		if(data.status== 401)
+		{
+			$('#message').html(data.msg);
+		}
+		else
+		{
+		$('#message').html("File uploaded successfully.");
+		document.getElementById("myImage").src="";
+		document.getElementById("myImage").src=data.src;
+		//window.location.href="settings.html";
+		location.reload();
+		}
+		console.log(data);
+	} else {
+		$('#message').html('Unknown error!');
+	}
+}
+} 
+else{
+		document.getElementById('maindiv').style.display='none';
+	}
+	return false;
+
+}
+	</script>
+    <body>
+    
+        <section data-role="page" id="pageSettings" data-theme='b'>
+			<div data-role="panel" data-display="push" id="sidebar" data-theme="a">
+	             <ul data-role="listview">
+	                     	<li data-icon='false'><a data-ajax="false" href="recactivitypage.html"><i class="fa fa-home fa-fw"></i>Home</a></li>
+							<li data-icon='false'><a data-ajax="false" href="about.html"><i class="fa fa-file-o fa-fw"></i>About</a></li>
+							
+							<li data-icon='false' class="menu-item-has-children"><a href="#"><i class="fa fa-exchange fa-fw"></i>Contact Us</a>
+								<ul data-role="listview" class="sub-menu">
+									<li data-icon='false'><a data-ajax="false" href="mailto:cmpe295asjsu@gmail.com"><i class="fa fa-envelope fa-fw"></i>Email</a></li>
+									<li data-icon='false'><a data-ajax="false" href="tel:4088169958"><i class="fa fa-phone fa-fw"></i>Call</a></li>
+								</ul>
+							</li>
+							<li data-icon='false'><a data-ajax="false" href="logout.html"><i class="fa fa-key fa-fw"></i>Logout</a></li>
+
+				</ul>                         
+	         </div>
+  			
+  <div data-role="panel" data-display="push" id="sidebar-right" data-position="right" data-theme="a" class="theme-b">
+			<img id = "myImage" src="" class="sidebarimage"  ></img>
+	            <ul data-role="listview">
+				<!--<li><img src="img/assets/blog-1.jpg" width="21%" align="right" ></img></li>-->
+					<li data-icon='false'><a data-ajax="false" href="#" onclick="return imageupload();"> <i class="fa fa-pencil-square-o fa-lg"></i>Edit Photo</a></li>	
+					<div class="maindiv" id="maindiv" style="display:none;">
+						<form method ="post" id="imageform" action= ""  data-ajax="false">
+							<div class="seconddiv">		
+								<input type="file" name="fileToUpload" id="fileToUpload" value="" placeholder="Choose your photo" data-theme="a" />
+								<input type="submit" id="buttonForm" value="Submit" data-theme="b"/>
+							</div>
+						</form>
+						<p id="message" class="message"></p>
+					</div>
+		 
+		
+				</ul>
+	         </div> <!-- #right-sidebar -->
+       
+          
+     			<section data-role="header" data-tap-toggle="false" data-theme='b'>
+              <a href='#sidebar' data-role="none"><img src="img/menu-icon.png" alt="sidebar" id="header-menu-icon" /></a>
+			   <a href='#sidebar-right' data-role="none" id="a-right-sidebar"><img src="img/right-menu-icon.png" alt="sidebar" id="header-search-icon" /></a>
+              <h1 class="header-title">Settings</h1>
+              
+          </section>
+            
+            <section data-role="content">
+			
+			<form action="http://cmpe235sjsu.com/295B_version6/PHP/settings.php" method="post" id="updateform" >
+			<section style="padding:10px 20px;">
+			
+			
+			<label for="un" >Full Name</label>
+			<input  data-role="none" class="textboxWidth" type="text" name="fullname" pattern="^[A-Za-z ]+$" title="Should contain only alphabets" id="fullname" value="" placeholder="name" required="required" readonly="readonly" />
+			<i class="fa fa-pencil-square-o fa-lg" onclick="document.getElementById('fullname').readOnly=false;document.getElementById('fullname').focus();"></i>
+			
+			<!--<h5 class="textboxWidth1"><a href="#">Edit Photo</a></h5>-->
+			
+			
+	    
+			<label for="un" >E-mail</label>
+			<input data-role="none" class="textboxWidth" type="email" name="email" id="email" value="" placeholder="email"  required="required" readonly="readonly" />
+			<i class="fa fa-pencil-square-o fa-lg"  onclick="document.getElementById('email').readOnly=false;document.getElementById('email').focus();"></i>
+		
+
+		
+			<label for="un" >Password</label>
+			<input data-role="none" class="textboxWidth" type="password" name="password"  id="password" value="" placeholder="password" required="required" readonly="readonly" onkeyup="validate(this);" />
+		    <i class="fa fa-pencil-square-o fa-lg" onclick="document.getElementById('password').readOnly=false;document.getElementById('password').focus();"></i>
+			
+			
+		<label for="un" >Address</label>
+		  <input type="text" data-role="none" class="textboxWidth" rows="50" cols="50" name="address" id="address" value="" placeholder="address" data-theme="a" readonly="readonly"/>
+		   <i class="fa fa-pencil-square-o fa-lg" onclick="document.getElementById('address').readOnly=false;document.getElementById('address').focus();"></i>
+		   
+		   
+			
+		    
+		   
+		  <fieldset class="ui-grid-e">
+		    
+    <section class="ui-block-a"><label for="un" >City</label>
+	<input type="text"  name="City" id="city" value="" placeholder="city" data-theme="a" required="required" readonly="readonly"/>
+	</section>
+	
+  <section class="ui-block-b">
+  <label for="un" >State</label>
+		  <select id="state" " name="State" data-mini="true" required="required">
+		  <option selected value="">Select..</option>
+	<option value="Alabama">AL</option>
+	<option value="Alaska">AK</option>
+	<option value="Arizona">AZ</option>
+	<option value="Arkansas">AR</option>
+	<option value="California">CA</option>
+	<option value="Colorado">CO</option>
+	<option value="Connecticut">CT</option>
+	<option value="Delaware">DE</option>
+	<option value="Dist of Columbia">DC</option>
+	<option value="Florida">FL</option>
+	<option value="Georgia">GA</option>
+	<option value="Hawaii">HI</option>
+	<option value="Idaho">ID</option>
+	<option value="Illinois">IL</option>
+	<option value="IN">IN</option>
+	<option value="IA">IA</option>
+	<option value="KS">KS</option>
+	<option value="KY">KY</option>
+	<option value="LA">LA</option>
+	<option value="ME">ME</option>
+	<option value="MD">MD</option>
+	<option value="MA">MA</option>
+	<option value="MI">MI</option>
+	<option value="MN">MN</option>
+	<option value="MS">MS</option>
+	<option value="MO">MO</option>
+	<option value="MT">MT</option>
+	<option value="NE">NE</option>
+	<option value="NV">NV</option>
+	<option value="NH">NH</option>
+	<option value="NJ">NJ</option>
+	<option value="NM">NM</option>
+	<option value="NY">NY</option>
+	<option value="NC">NC</option>
+	<option value="ND">ND</option>
+	<option value="OH">OH</option>
+	<option value="OK">OK</option>
+	<option value="OR">OR</option>
+	<option value="PA">PA</option>
+	<option value="RI">RI</option>
+	<option value="SC">SC</option>
+	<option value="SD">SD</option>
+	<option value="TN">TN</option>
+	<option value="TX">TX</option>
+	<option value="UT">UT</option>
+	<option value="VT">VT</option>
+	<option value="VA">VA</option>
+	<option value="WA">WA</option>
+	<option value="WV">WV</option>
+	<option value="WI">WI</option>
+	<option value="WY">WY</option>
+</select>
+</section>
+		
+    <section class="ui-block-c"><label for="un" >Zipcode</label>
+	 <input type="text"  name="zip" id="zip" data-role="none" class="textboxWidth2" pattern="^([0-9]{1}[1-9]{1}[0-9]{3})$" title="5 digits only" value="" placeholder="zip" data-theme="a" required="required" readonly="readonly" />
+	 <i class="fa fa-pencil-square-o fa-lg " onclick="changefocus();"></i> 
+	 </section>
+	<!--<section class="ui-block-d">
+	<i class="fa fa-pencil-square-o fa-lg " onclick="changefocus();"></i>
+	</section>-->
+	 
+</fieldset>
+ 
+ <label for="un">Website</label>
+		 <input type="url" name="website" data-role="none" class="textboxWidth" id="website" value="" placeholder="organization website" data-theme="a" required="required" readonly="readonly"/>
+		 <i class="fa fa-pencil-square-o fa-lg"  onclick="document.getElementById('website').readOnly=false;document.getElementById('website').focus();"></i>
+		 
+			<label for="un" >Country</label>
+		  <input type="text" data-role="none" class="textboxWidth" name="Country" id="country" value="USA" placeholder="country" data-theme="a" readonly />
+		  
+		 
+		  <!--fieldset for operation hrs and foodtype starts here -->
+		  <fieldset class="ui-grid-a">
+		  <div class="ui-block-a">	
+		  <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+		  <br><legend><h5>Hours of Operation</h5></legend>
+		  <!--fieldset to start operation hrs starts here -->
+		  <fieldset class="ui-grid-e" > 
+		  	<!--fieldset for start time & end time begins here -->
+		  <div class="ui-block-a ui-corner-all">
+			<select id="startTime" name="starthrs" data-theme="a" onmouseup="validate(this);">
+				<option value="00:00" />00:00
+			    <option value="01:00" />01:00
+			    <option value="02:00" />02:00
+			    <option value="03:00" />03:00
+			    <option value="04:00" />04:00
+				<option value="05:00" />05:00
+				<option value="06:00" />06:00
+				<option value="07:00" />07:00
+				<option value="08:00" />08:00
+				<option selected value="09:00" />09:00
+				<option value="10:00" />10:00
+				<option value="11:00" />11:00
+				<option value="12:00" />12:00
+				<option value="13:00" />13:00
+				<option value="14:00" />14:00
+				<option value="15:00" />15:00
+				<option value="16:00" />16:00
+				<option value="17:00" />17:00
+				<option value="18:00" />18:00
+				<option value="19:00" />19:00
+				<option value="20:00" />20:00
+				<option value="21:00" />21:00
+				<option value="22:00" />22:00
+				<option value="23:00" />23:00
+			</select>
+			</div>
+			<div class="ui-block-b ui-corner-all"><p><strong>to</strong></p></div>
+			    <div class="ui-block-c ui-corner-all">
+				<select id="endTime" name="endhrs" onmouseup="validate(this);" >
+			    <option value="01:00" />01:00
+			    <option value="02:00" />02:00
+			    <option value="03:00" />03:00
+			    <option value="04:00" />04:00
+				<option value="05:00" />05:00
+				<option value="06:00" />06:00
+				<option value="07:00" />07:00
+				<option value="08:00" />08:00
+				<option value="09:00" />09:00
+				<option value="10:00" />10:00
+				<option value="11:00" />11:00
+				<option value="12:00" />12:00
+				<option value="13:00" />13:00
+				<option value="14:00" />14:00
+				<option value="15:00" />15:00
+				<option value="16:00" />16:00
+				<option value="17:00" />17:00
+				<option selected value="18:00" />18:00
+				<option value="19:00" />19:00
+				<option value="20:00" />20:00
+				<option value="21:00" />21:00
+				<option value="22:00" />22:00
+				<option value="23:00" />23:00
+		  </select>
+		  </div>
+		  </fieldset><!--fieldset for start time & end time begins here -->
+		  </fieldset>
+		  </div>
+		 
+		   </fieldset> <!--fieldset for operation hrs and foodtype ends here -->
+		   
+		    
+		  <div>
+		      <!--<div data-role="fieldcontain">-->
+		      	<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+			   	<legend><h5>Type of food preferred</h5></legend>
+
+			   	<br>
+			   	<input type="checkbox"  name="typeFood[]" id="checkbox-1" value="Canned" class="custom"   data-theme="a" />
+			   	<label for="checkbox-1">Canned</label>
+
+			   
+			   	<input type="checkbox"  name="typeFood[]" id="checkbox-2" value="Raw" class="custom" data-theme="a" />
+			   	<label for="checkbox-2">Raw</label>
+
+			   
+				<input type="checkbox"  name="typeFood[]" id="checkbox-3" value="Cooked" class="custom" data-theme="a"/>
+			   	<label for="checkbox-3">Cooked</label>
+
+                </fieldset>
+			   </div>
+			  <!--</div>-->
+			
+
+			<button type="submit" data-role="none"  class="nightly-button" data-theme="b"><i class="fa fa-check-circle"></i>Save</button>  	
+	  </form>
+	  </section>
+            			<!-- <div id="displayerror" style="display:none;color:red;"></div>-->
+						<!-- <div id="displaycorrect" style="display:none;color:green;"></div>-->
+						<div  id="displayerror" style="display:none" class='nightly-alert nightly-alert-error'>
+	<i class='fa fa-2x fa-exclamation fa-fw'></i>
+	
+</div>
+
+						<div  id="displaycorrect" style="display:none;" class='nightly-alert nightly-alert-success'>
+    <class='fa fa-2x fa-check fa-fw'></i>
+  
+</div>
+						 
+						 <div data-role="footer" data-theme="none" data-border="false">
+ <div style="text-align:center;">
+				<img src="img/assets/logo.jpg" alt="logo" width="145" />
+				</div>
+            </div>
+			<div data-role="footer" data-position="fixed" data-border="false" data-tap-toggle="false">
+            	<div data-role="navbar">
+            		<ul>
+            			<li><a href="contact.php"><i class="fa fa-map-marker fa-fw"></i><span>Map</span></a></li>
+            			<li><a href="tel:123456789"><i class="fa fa-phone fa-fw"></i><span>Call</span></a></li>
+            			<li><a href="mailto:cmpe295asjsu@gmail.com"><i class="fa fa-envelope fa-fw"></i><span>E-mail</span></a></li>
+            			<li><a href="https://www.facebook.com/lukepostulka"><i class="fa fa-facebook fa-fw"></i><span>Facebook </span></a></li>
+            			<li><a href="https://twitter.com/lukepostulka"><i class="fa fa-twitter fa-fw"></i><span>Twitter</span></a></li>
+            		</ul>
+            	</div>
+            </div>
+			  </section>
+
+    </body>
+</html>

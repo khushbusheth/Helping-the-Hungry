@@ -1,0 +1,201 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+<meta charset="utf-8">
+<title>Food For All</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <!-- jQueryMobileCSS - styling-->
+    <link rel="stylesheet" href="css/jqeury.mobile.theme.min.css" />	
+    <!-- jQueryMobile icons -->
+    <link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />	<!-- jQueryMobile core CSS -->
+    <link rel="stylesheet" href="css/jquery.mobile.min.css" />
+    <!-- NIGHTLY style -->
+    <link rel="stylesheet" href="css/nightly.css" />
+    <!-- Load Google Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900,300italic,400italic,600italic,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
+    <!-- Load Font Awesome Icons -->
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- NIGHTLY JS -->
+    <script src="js/nightly.js"></script>
+</head> 
+<body>
+<div data-role="page" id="pageActivity" data-theme='b'>
+
+<div data-role="panel" data-display="push" id="sidebar" data-theme="a">
+
+               <ul data-role="listview">
+
+                        <li data-icon='false'><a data-ajax="false" href="donoractivitypage.html"><i class="fa fa-home fa-fw"></i>Home</a></li>
+
+              <li data-icon='false'><a data-ajax="false" href="about.html"><i class="fa fa-file-o fa-fw"></i>About</a></li>
+
+              <li data-icon='false'><a data-ajax="false" href="#"><i class="fa fa-clock-o fa-fw"></i>History</a></li>
+
+              <li data-icon='false' class="menu-item-has-children"><a href="#"><i class="fa fa-exchange fa-fw"></i>Contact Us</a>
+
+                <ul data-role="listview" class="sub-menu">
+
+                  <li data-icon='false'><a data-ajax="false" href="mailto:cmpe295asjsu@gmail.com"><i class="fa fa-envelope fa-fw"></i>Email</a></li>
+
+                  <li data-icon='false'><a data-ajax="false" href="tel:4088169958"><i class="fa fa-phone fa-fw"></i>Call</a></li>
+
+                </ul>
+
+              </li>
+
+            
+
+              <li data-icon='false' class="menu-item-has-children"><a href="#"><i class="fa fa-user fa-fw"></i>Tell Friends</a>
+
+                <ul data-role="listview" class="sub-menu">
+
+                  <li data-icon='false'><a data-ajax="false" href="#"><i class="fa fa-facebook fa-fw"></i>Facebook</a></li>
+
+                  <li data-icon='false'><a data-ajax="false" href="#"><i class="fa fa-twitter fa-fw"></i>Twitter</a></li>
+
+                </ul>           
+
+              </li>
+
+              <li data-icon='false'><a data-ajax="false" href="logout.html"><i class="fa fa-key fa-fw"></i>Logout</a></li>
+        </ul>                         
+           </div>
+<!--HEADER OF PAGE-->
+           <div data-role="header" data-tap-toggle="false" data-theme='b'>
+               <a href='#sidebar' data-role="none"><img src="img/menu-icon.png" alt="sidebar" id="header-menu-icon" /></a>
+               <h1 class="header-title">Food For All</h1>  
+           </div>
+<!-- CONTENT of PAGE-->
+<div data-role="content">
+
+  <!-- donation history content-->
+ 
+
+                    <h3 style="text-align:center">My Donation History</h3>
+
+                 <div data-role="collapsible-set" data-position="inline"data-theme="b" data-content-theme="d">
+
+                  <div data-role="collapsible">
+
+                    <h3 data-position="inline">2016<h3>
+
+                    <ul data-role="listview" data-position="inline" data-inset="true"data-divider-theme="d" class="list">
+
+                      <li ><a href="#1" id="jan" onClick="getMonth(1)" data-rel="popup" data-transition="slide">January</a></li>
+
+                      <li><a href="#2" class="2" onClick="getMonth(2)" data-rel="popup" data-transition="slide">February</a></li>
+
+                      <li><a href="#3" class="3" onClick="getMonth(3)" data-rel="popup" data-transition="slide">March</a></li>
+
+                      <li><a href="#4" class="4" onClick="getMonth(4)" data-rel="popup"  data-transition="slide">April</a></li>
+
+                      <li><a href="#5" class="5" onClick="getMonth(5)" data-rel="popup"  data-transition="slide">May</a></li>
+
+                      <li><a href="#6" class="6" onClick="getMonth(6)" data-rel="popup"  data-transition="slide">June</a></li>
+
+                      <li><a href="#7" class="7" onClick="getMonth(7)" data-rel="popup"  data-transition="slide">July</a></li>
+
+                      <li><a href="#8" class="8" onClick="getMonth(8)" data-rel="popup" data-transition="slide">August</a></li>
+
+                      <li><a href="#9" class="9" onClick="getMonth(9)" data-rel="popup"  data-transition="slide">September</a></li>
+
+                      <li><a href="#10"  class="10" onClick="getMonth(10)" data-rel="popup" data-transition="slide">October</a></li>
+
+                      <li><a href="#11" class="11" onClick="getMonth(11)" data-rel="popup"  data-transition="slide">November</a></li>
+
+                      <li><a href="#12" class="12" onClick="getMonth(12)" data-rel="popup" data-transition="slide">December</a></li>
+
+
+                        <div id="1" data-role="popup" >  
+                        </div>
+
+                        <div id="2" data-role="popup" >
+                        </div>
+
+                        <div data-role="popup" id="3" >
+                        </div>
+
+                        <div data-role="popup" id="4" >  
+                        </div>
+
+                        <div data-role="popup" id="5">
+                        </div>
+
+                        <div data-role="popup" id="6" >
+                        </div>
+
+                        <div data-role="popup" id="7" >
+                        </div>
+                     
+                        <div data-role="popup" id="8">
+                        </div>
+
+                        <div data-role="popup" id="9" >
+                        </div>
+
+                        <div data-role="popup" id="10" >
+                        </div>
+
+                        <div data-role="popup" id="11">
+                        </div>
+
+                        <div data-role="popup" id="12">
+                        </div>
+                    </ul> 
+
+                  </div> 
+
+                </div> 
+      </div>
+   <!-- page content finishes -->
+        <!--FOOTER OF PAGE-->
+       <div data-role="footer" data-theme="none" data-border="false">
+        <div style="text-align:center;">
+              <img src="img/assets/logo.jpg" alt="logo" width="145" />
+              </div>
+        </div>
+            <div data-role="footer" data-position="fixed" data-border="false" data-tap-toggle="false">
+              <div data-role="navbar">
+                <ul>
+                  <li><a href="contact.php"><i class="fa fa-map-marker fa-fw"></i><span>Map</span></a></li>
+                  <li><a href="tel:123456789"><i class="fa fa-phone fa-fw"></i><span>Call</span></a></li>
+                  <li><a href="mailto:cmpe295asjsu@gmail.com"><i class="fa fa-envelope fa-fw"></i><span>E-mail</span></a></li>
+                  <li><a href="https://www.facebook.com/lukepostulka"><i class="fa fa-facebook fa-fw"></i><span>Facebook </span></a></li>
+                  <li><a href="https://twitter.com/lukepostulka"><i class="fa fa-twitter fa-fw"></i><span>Twitter</span></a></li>
+                </ul>
+              </div>
+            </div>
+</div>   
+    <script type="text/javascript">	if(!(localStorage.length))	{		window.location.href="index.html";	}
+      var id,month,details,json,str,len,count;  
+      function getMonth(id){
+      month=id;document.getElementById(month).innerHTML='';
+      console.log(month);	var data=localStorage.getItem("email");
+      $.ajax({
+        url: "http://cmpe235sjsu.com/295B_version6/PHP/donationHistory.php",
+        type: "POST",
+        dataType: 'json',
+        data: {          'month': month,		  'email':data        },
+        //contentType:'json',
+        success: function(msg){
+        //alert('wow' + msg);
+        details=msg;
+        console.log(details);
+        if (details.data.length > 0) {
+        $.each(details.data, function(key, value) {
+          //console.log(details.data.typefood);
+          $('#'+month).append('<p>Volunteer Name='+value.volname+'</br> Time = ' + value.time +'</br> Recipient Name = '+ value.recname+'</br> Type of Food = '+ value.typefood+'</p>');
+        });
+        } else {
+          $('#'+month).append('<p>You have no history of donations in this month. </p>');
+        }
+      }
+   });
+  
+  }
+    </script>
+</body>
+</html>

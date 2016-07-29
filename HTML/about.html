@@ -1,0 +1,300 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+<meta charset="utf-8">
+<title>Food For All</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+		<!-- jQueryMobileCSS - styling-->
+		<link rel="stylesheet" href="css/jqeury.mobile.theme.min.css" />
+				
+		<!-- jQueryMobile icons -->
+		<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />
+		
+		<!-- jQueryMobile core CSS -->
+		<link rel="stylesheet" href="css/jquery.mobile.min.css" />
+		
+		<!-- Owl stylesheet -->
+		<link rel="stylesheet" href="css/owl.carousel.css">
+		
+		<!-- Owl Theme -->
+		<link rel="stylesheet" href="css/owl.theme.css">
+				
+		<!-- NIGHTLY style -->
+		<link rel="stylesheet" href="css/nightly.css" />
+				
+		<!-- Load Google Fonts -->
+		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900,300italic,400italic,600italic,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
+		
+		<!-- Load Font Awesome Icons -->
+		<link rel="stylesheet" href="css/font-awesome.min.css">
+		
+		<!-- jQuery -->
+		<script src="js/jquery.min.js"></script>
+		
+		<!-- jQueryMobile -->
+		<script src="js/jquery.mobile.min.js"></script>
+		
+		<!-- Owl Carousel -->
+		<script src="js/owl.carousel.min.js"></script>
+		
+		<!-- NIGHTLY JS -->
+		<script src="js/nightly.js"></script>
+
+		<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>-->
+		
+		<script type="text/javascript">
+		if(!(localStorage.length))
+	{
+		window.location.href="index.html";
+	}
+ $(document).ready(function($) {
+                            
+                var time = 8; // time in seconds
+                 
+                  var $progressBar,
+                      $bar, 
+                      $elem, 
+                      isPause, 
+                      tick,
+                      percentTime;
+                 
+              
+                    $("#main-slider").owlCarousel({   
+                          
+                          slideSpeed : 700,
+                          paginationSpeed : 700,
+                          rewindSpeed : 1500,
+                          singleItem : true,
+						  pagination : false,
+                          lazyLoad : true,
+                          autoPlay : 10000,
+                          stopOnHover : true,
+                          navigation: false,
+                          navigationText: [
+                            "<i class='owl-nav-left fa fa-angle-left'></i>",
+                            "<i class='owl-nav-right fa fa-angle-right'></i>"
+                            ],
+                          afterInit : progressBar,
+                          afterMove : moved,
+                          startDragging : pauseOnDragging
+                       });
+                 
+                 
+                    function progressBar(elem){
+                      $elem = elem;
+                      buildProgressBar();
+                      start();
+                    }
+                 
+                 
+                    function buildProgressBar(){
+                      $progressBar = $("<div>",{
+                        id:"progressBar"
+                      });
+                      $bar = $("<div>",{
+                        id:"bar"
+                      });
+                      $progressBar.append($bar).prependTo($elem);
+                    }
+                 
+                    function start() {
+                      
+                      percentTime = 0;
+                      isPause = false;
+                      
+                      tick = setInterval(interval, 10);
+                    };
+                 
+                    function interval() {
+                      if(isPause === false){
+                        percentTime += 1 / time;
+                        $bar.css({
+                           width: percentTime+"%"
+                         });
+                         
+                        if(percentTime >= 100){
+                        
+                          $elem.trigger('owl.next')
+                        }
+                      }
+                    }
+                 
+                    function pauseOnDragging(){
+                      isPause = true;
+                    }
+                 
+                    function moved(){
+                    
+                      clearTimeout(tick);
+                      start();
+                    }
+                 
+                    
+                     $elem.on('mouseover',function(){
+                       isPause = true;
+                     })
+                     $elem.on('mouseout',function(){
+                       isPause = false;
+                     })
+					  var role=localStorage.getItem("role");
+			if(role=="recipient")
+			{
+					 $('#hist').hide();
+					 $('#tell').hide();
+					 $('#face').hide();
+					  $('#tweet').hide();
+					 }
+            })
+			//Function navigate ... about.html to respective home pages
+function navigate()
+			{
+			var role=localStorage.getItem("role");
+			if(role=="donor")
+			{
+			document.getElementById('navigat').href="donoractivitypage.html";
+			}
+			else if(role=="volunteer")
+			{
+				document.getElementById('navigat').href="volactivitypage.html";
+				
+			}
+			else
+			{
+				document.getElementById('navigat').href="recactivitypage.html";
+			}
+			}
+			
+	//Function navigateHistory ... about.html to respective history pages
+		function navigateHistory(){
+			var role=localStorage.getItem("role");
+			if(role=="donor")
+			{
+			document.getElementById('navHist').href="donationHistory.html";
+			}
+			else if(role=="volunteer")
+			{
+				document.getElementById('navHist').href="volunteerhistory.html";
+				
+			}
+			else
+			{
+				document.getElementById('navHist').href="#";
+			}
+		}			
+			</script>
+
+</head> 
+<body>
+<div data-role="page" id="pageAbout" data-theme='b'>
+<div data-role="panel" data-display="push" id="sidebar" data-theme="a">
+	             <ul data-role="listview">
+	                     	<li data-icon='false'><a data-ajax="false" id="navigat" href="#" onclick="navigate();"><i class="fa fa-home fa-fw"></i>Home</a></li>
+							<li data-icon='false'><a data-ajax="false" href="about.html"><i class="fa fa-file-o fa-fw"></i>About</a></li>
+							<li data-icon='false' id="hist"><a data-ajax="false" id="navHist" href="#" onclick="navigateHistory();"><i class="fa fa-clock-o fa-fw"></i>History</a></li>
+							<li data-icon='false' class="menu-item-has-children"><a href="#"><i class="fa fa-exchange fa-fw"></i>Contact Us</a>
+								<ul data-role="listview" class="sub-menu">
+									<li data-icon='false'><a data-ajax="false" href="mailto:cmpe295asjsu@gmail.com"><i class="fa fa-envelope fa-fw"></i>Email</a></li>
+									<li data-icon='false'><a data-ajax="false" href="tel:4088169958"><i class="fa fa-phone fa-fw"></i>Call</a></li>
+								</ul>
+							</li>
+						
+							<li data-icon='false' id="tell" class="menu-item-has-children"><a href="#"><i class="fa fa-user fa-fw"></i>Tell Friends</a>
+								<ul data-role="listview" class="sub-menu">
+									<li data-icon='false'><a data-ajax="false" href="#"><i class="fa fa-facebook fa-fw"></i>Facebook</a></li>
+									<li data-icon='false'><a data-ajax="false" href="#"><i class="fa fa-twitter fa-fw"></i>Twitter</a></li>
+								</ul>						
+							</li>
+							<li data-icon='false'><a data-ajax="false" href="logout.html"><i class="fa fa-key fa-fw"></i>Logout</a></li>
+
+				</ul>                         
+	         </div>
+			 
+<!--HEADER OF PAGE-->
+		
+	         <div data-role="header" data-tap-toggle="false" data-theme='b'>
+	             <a href='#sidebar' data-role="none"><img src="img/menu-icon.png" alt="sidebar" id="header-menu-icon" /></a>
+	             <h1 class="header-title">Food For All</h1>    
+	         </div>
+<!-- BODY of PAGE-->
+<div data-role="content">
+		<div data-role="none" id="main-slider" class="owl-carousel">
+                    <div class="item">
+                      <img src="img/assets/blog-1.jpg" alt="pic1">
+                      <div class="text">
+                          <h1>Food for all</h1>
+                          <h2>Let's join hands to help prevent hunger</h2>
+                      </div>
+                    </div>
+                    <div class="item">
+                      <img src="img/assets/blog-2.jpg" alt="pic2">
+                      <div class="text">
+                          <h1></h1>
+                          <h2>Stop food wastage and help the hungry!</h2>
+                      </div>
+                    </div>
+    
+                    <div class="item">
+                      <img src="img/assets/blog-3.jpg" alt="pic3">
+                      <div class="text">
+                          <h1>Food for all</h1>
+                          <h2>Donate or Volunteer to transfer food</h2>
+                      </div>
+                    </div>
+    
+                    <div class="item">
+                      <img src="img/assets/blog-4.jpg" alt="pic4">
+                      <div class="text">
+                          <h1>Food for all</h1>
+                          <h2>Channelising excess food to help a needy</h2>
+                      </div>
+                    </div>
+
+                </div>
+				
+						  <h3>About 'Food for all'</h3>
+			
+				<div data-role="none">
+				<p>
+                <ul data-role="listview" data-icon="false" data-divider-theme="b">
+				<li data-role="list-divider" style="font-size:70%;">Why use this app??</li>
+                        <p style="margin-left:20px; font-size:70%;">To stop food wastage and help the hungry</p>
+				<li data-role="list-divider" style="font-size:70%;">Who can use this app??</li>
+					<p><ul style="font-size:70%;">
+							<li>DONOR - any restaurant, individual or organization with the capacity to donate food items(prepared, raw, processed, other grocery items)</li>
+							<li>VOLUNTEER - any person who is willing to be the medium to transport food from the donor to the recipient</li>
+							<li>RECIPIENT - an authentic organization( food banks, orphanages or  homeless shelter) that is in need of food donated, to feed the hungry; and the organization must be able to provide a receipt as a note of acknowledgement, declaring the quantity of food delivered.</li>
+						</ul></p>
+					<li data-role="list-divider" style="font-size:70%;">What does this app do??</li>
+                        <p style="margin-left:20px; font-size:70%;">This app serves 3 purposes:
+						<ul style="font-size:70%;">
+							<li>Provides an open platform for a willing individual to transport food from the donor to the recipient</li>
+							<li>Provides a willing food donor to be able to notify on an open platform that food is available.</li>
+							<li>Allows organizations that are willing to accept charity food to notify themselves that they can accept food at that point of time.</li>
+						</ul></p>
+						<li data-role="list-divider" style="font-size:70%;">OUR GOAL</li>
+                        <p style="margin-left:20px; font-size:70%;">We are a bunch of developers that decided to shift the way the world deals with excess food by providing technology which allows us to channelise food better and feed the hungry.</p>
+				</ul>
+                </p>
+				</div>
+</div>
+	<!--FOOTER OF PAGE-->
+ <div data-role="footer" data-theme="none" data-border="false">
+ <div style="text-align:center;">
+				<img src="img/assets/logo.jpg" alt="logo" width="145" />
+				</div>
+            </div>
+			<div data-role="footer" data-position="fixed" data-border="false" data-tap-toggle="false">
+            	<div data-role="navbar">
+            		<ul>
+            			<li><a href="contact.php"><i class="fa fa-map-marker fa-fw"></i><span>Map</span></a></li>
+            			<li><a href="tel:123456789"><i class="fa fa-phone fa-fw"></i><span>Call</span></a></li>
+            			<li><a href="mailto:cmpe295asjsu@gmail.com"><i class="fa fa-envelope fa-fw"></i><span>E-mail</span></a></li>
+            			<li id="face"><a href="https://www.facebook.com/lukepostulka"><i class="fa fa-facebook fa-fw"></i><span>Facebook </span></a></li>
+            			<li id="tweet"><a href="https://twitter.com/lukepostulka"><i class="fa fa-twitter fa-fw"></i><span>Twitter</span></a></li>
+            		</ul>
+            	</div>
+            </div>
+</div>                	
+</body>
+</html>

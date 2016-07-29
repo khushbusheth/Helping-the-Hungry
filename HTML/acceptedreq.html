@@ -1,0 +1,662 @@
+<!DOCTYPE html> 
+
+<html> 
+
+<head> 
+
+<meta charset="utf-8">
+
+<title>Food For All</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+
+
+		<!-- jQueryMobileCSS - styling-->
+
+		<link rel="stylesheet" href="css/jqeury.mobile.theme.min.css" />
+
+				
+
+		<!-- jQueryMobile icons -->
+
+		<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />
+
+		
+
+		<!-- jQueryMobile core CSS -->
+
+		<link rel="stylesheet" href="css/jquery.mobile.min.css" />
+
+		
+
+		<!-- Owl stylesheet -->
+
+		<link rel="stylesheet" href="css/owl.carousel.css">
+
+		
+
+		<!-- Owl Theme -->
+
+		<link rel="stylesheet" href="css/owl.theme.css">
+
+				
+
+		<!-- NIGHTLY style -->
+
+		<link rel="stylesheet" href="css/nightly.css" />
+
+				
+
+		<!-- Load Google Fonts -->
+
+		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900,300italic,400italic,600italic,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
+
+		
+
+		<!-- Load Font Awesome Icons -->
+
+		<link rel="stylesheet" href="css/font-awesome.min.css">
+
+		
+
+		<!-- jQuery -->
+
+		<script src="js/jquery.min.js"></script>
+
+		
+
+		<!-- jQueryMobile -->
+
+		<script src="js/jquery.mobile.min.js"></script>
+
+		
+
+		<!-- Owl Carousel -->
+
+		<script src="js/owl.carousel.min.js"></script>
+
+		<link rel="stylesheet" href="css/project.css">
+
+		<!-- NIGHTLY JS -->
+
+		<script src="js/nightly.js"></script>
+
+		<link rel='stylesheet' href='./src/jAlert-v3.css'>
+		<script src='./src/jAlert-v3.js'></script>
+		<script src='./src/jAlert-functions.js'></script>
+		
+
+		<!-- Google maps API -->
+
+    	<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
+
+       <!-- jAlert resources-->
+		<link rel='stylesheet' href='./src/jAlert-v3.css'>
+		<script src='./src/jAlert-v3.js'></script>
+		<script src='./src/jAlert-functions.js'></script>
+
+
+		
+
+		 <!--// star rating plugin-specific resources //-->
+
+		<script src='star-rating/jquery.MetaData.js' type="text/javascript" language="javascript"></script>
+
+		<script src='star-rating/jquery.rating.js' type="text/javascript" language="javascript"></script>
+
+		<link href='star-rating/jquery.rating.css' type="text/css" rel="stylesheet"/>
+<script type="text/javascript">
+
+(function() {
+
+    var destinationAddress = []; 
+    var destinationAddressRec= [];
+
+    if (!(localStorage.length)) {
+        window.location.href = "index.html";
+    }
+
+    $(document).ready(function ($) {
+
+
+        showVolunteerDetails();
+
+        var time = 8; // time in seconds
+
+
+        var $progressBar,
+
+            $bar,
+
+            $elem,
+
+            isPause,
+
+            tick,
+
+            percentTime;
+
+
+        $("#main-slider").owlCarousel({
+
+
+            slideSpeed: 700,
+
+            paginationSpeed: 700,
+
+            rewindSpeed: 1500,
+
+            singleItem: true,
+
+            pagination: false,
+
+            lazyLoad: true,
+
+            autoPlay: 10000,
+
+            stopOnHover: true,
+
+            navigation: false,
+
+            navigationText: [
+
+                "<i class='owl-nav-left fa fa-angle-left'></i>",
+
+                "<i class='owl-nav-right fa fa-angle-right'></i>"
+
+            ],
+
+            afterInit: progressBar,
+
+            afterMove: moved,
+
+            startDragging: pauseOnDragging
+
+        });
+
+
+        function progressBar(elem) {
+
+            $elem = elem;
+
+            buildProgressBar();
+
+            start();
+
+        }
+
+
+        function buildProgressBar() {
+
+            $progressBar = $("<div>", {
+
+                id: "progressBar"
+
+            });
+
+            $bar = $("<div>", {
+
+                id: "bar"
+
+            });
+
+            $progressBar.append($bar).prependTo($elem);
+
+        }
+
+
+        function start() {
+
+            percentTime = 0;
+
+            isPause = false;
+
+
+            tick = setInterval(interval, 10);
+
+        }
+
+
+        function interval() {
+
+            if (isPause === false) {
+
+                percentTime += 1 / time;
+
+                $bar.css({
+
+                    width: percentTime + "%"
+
+                });
+
+
+                if (percentTime >= 100) {
+
+
+                    $elem.trigger('owl.next')
+
+                }
+
+            }
+
+        }
+
+
+        function pauseOnDragging() {
+
+            isPause = true;
+
+        }
+
+
+        function moved() {
+
+
+            clearTimeout(tick);
+
+            start();
+
+        }
+
+
+        $elem.on('mouseover', function () {
+
+            isPause = true;
+
+        });
+
+        $elem.on('mouseout', function () {
+
+            isPause = false;
+
+        });
+
+    });
+
+
+    //AJAX call to show more details to volunteer about the donation request
+
+    //  AJAX call to get data for notification
+
+    function showVolunteerDetails() {
+
+        var details, msg;
+
+        email = {};
+
+        //console.log(month);
+        var email_id = localStorage.getItem("email");
+    
+        $.ajax({
+
+            url: "http://cmpe235sjsu.com/295B_version6/PHP/acceptedreq.php",
+
+            type: "POST",
+
+            dataType: 'json',
+
+            data: {
+
+                'emailid': email_id
+            },
+
+            success: function (msg) {
+
+                details = msg;
+
+
+                console.log("hiiii success");
+                if (msg.empty == "1") {
+                    console.log("hitting if");
+
+
+                    $.each(details.data, function (key, value) {
+
+                        $('#accept').append('<div class="div-box"><br><p><Strong>Donation Request Details:</Strong></p>Donor\'s Address=' + value.donoraddreess + '<div id="donCompute"><div id="duration" style="font-weight:bold;"></div><div id="total" style="font-weight:bold"></div></div><a id="destinationId" href="http://maps.google.com/maps?daddr=' + value.donoraddreess + '"><input type="button" data-inline="true" class="nightly-button" data-theme="c" value="get donor\'s directions"/></a></br> Donors type of food = ' + value.typefood + '</br> Donors preferred time = ' + value.pickuptime + '</br>Donor\'s Phone Number=' + value.donorname + '</br>Recipient\'s Name=' + value.recepientname + '</br>Recipient\'s Address=' + value.recepientadd + '<br><div id="recCompute"><div id="durationRec" style="font-weight:bold;"></div><div id="totalRec" style="font-weight:bold;"></div></div><a id="destinationId" href="http://maps.google.com/maps?daddr=' + value.recepientadd + '"><input type="button" data-inline="true" class="nightly-button" data-theme="c" value="get recipient\'s directions"/></a></br></p>' + 
+                            '</p> </div></br>');
+
+
+                    destinationAddress.push(value.donoraddreess);
+                    destinationAddressRec.push(value.recepientadd);
+                    console.log(destinationAddress);
+                    console.log(destinationAddressRec);
+                   
+                  });
+                }
+
+                else {
+
+                    $('#accept').append('<p style="color:Red">You do not have any pending requests. </p>');
+
+                }
+                call();// for distance and time 
+            }
+
+        });
+    }
+
+    //calculate current location
+
+    var geocoder;
+    function readLocation() {
+        console.log("i am hit");
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
+        }
+    }
+    function successFunction(position) {
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+        codeLatLng(lat, lng)
+    }
+
+    function errorFunction(){ alert("Geocoder failed"); }
+
+    function codeLatLng(lat, lng) {
+        var latlng = new google.maps.LatLng(lat, lng);
+        geocoder.geocode({'latLng': latlng}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                if (results[1]) {
+                    interpretation(results, lat, lng);
+                } else {
+                    alert("No results found");
+                }
+            } else {
+                alert("Geocoder failed due to: " + status);
+            }
+        });
+    }
+
+    function interpretation(results, lat, lng) {
+        console.log(" hello");
+        var address="";
+        //console.log(results[1]);
+
+        for(var i=0;i<results[1].address_components.length;i++)
+        {
+            if(results[1].address_components[i].short_name)
+            {
+                if(i== results[1].address_components.length-1)
+                {
+                    address =  address + results[1].address_components[i].short_name;
+                }
+                else
+                {
+                    address =  address + results[1].address_components[i].short_name+", "; }
+            }
+        }
+        console.log(address);
+        var l = destinationAddress.length;
+        var i = 0;
+        while(i<l)
+        {
+            startNavigation(address,destinationAddress[i]);
+            startNavigationRec(destinationAddress[i],destinationAddressRec[i]);
+            i++;
+        }
+
+    }
+
+    function call()
+    {
+        console.log("i am hit too");
+        readLocation();
+        geocoder = new google.maps.Geocoder();
+        return false;
+    }    //calculate current location ends here
+
+    //calculate and display distance to the donor's place here
+    function startNavigation(originaddr,destinationAddress) {
+
+        var directionsService = new google.maps.DirectionsService();
+        var directionsDisplay = new google.maps.DirectionsRenderer();
+        console.log(originaddr);
+        var selectedMode = 'DRIVING';
+
+         var request = {
+            origin: originaddr ,//"return call();",
+            destination: destinationAddress,
+            travelMode: google.maps.DirectionsTravelMode[selectedMode]
+
+        };
+        //console.log(request.origin);
+        directionsService.route(request, function (response, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+                console.log("got direction");
+                directionsDisplay.setDirections(response);
+            }
+        });
+
+        google.maps.event.addListener(directionsDisplay, 'directions_changed', function () {
+            computeTotalDistance(directionsDisplay.directions);
+        });
+
+        function computeTotalDistance(result) {
+            var total = 0;
+            var time = 0;
+            var from = 0;
+            var to = 0;
+            var myroute = result.routes[0];
+            for (var i = 0; i < myroute.legs.length; i++) {
+                total += myroute.legs[i].distance.value;
+                time += myroute.legs[i].duration.text;
+                from = myroute.legs[i].start_address;
+                to = myroute.legs[i].end_address;
+            }
+            time = time.replace('hours', 'H');
+            time = time.replace('mins', 'M');
+            total = total* 0.00062137;
+            console.log(total);
+            document.getElementById('duration').innerHTML = 'Time Taken' + '=' + time;
+            document.getElementById('total').innerHTML = 'Total Distance' + '=' + Math.round(total) + "Mi"; 
+        }
+
+    }
+
+    //calculate and display distance to the recipient's place here
+    function startNavigationRec(destinationAddress,destinationAddressRec) {
+
+        /*var dest=document.getElementById("destinationID").value;
+         var nav_url = "http://www.maps.google.com?saddr=current location&daddr=" + dest;
+         window.open(nav_url);*/
+
+        console.log("Friday");
+        var directionsService = new google.maps.DirectionsService();
+        var directionsDisplay = new google.maps.DirectionsRenderer();
+        console.log(destinationAddress);
+        var selectedMode = 'DRIVING';
+
+         var request = {
+            origin:destinationAddress ,//"return call();",
+            destination: destinationAddressRec,
+            travelMode: google.maps.DirectionsTravelMode[selectedMode]
+
+        };
+        //console.log(request.origin);
+        directionsService.route(request, function (response, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+                console.log("got direction");
+                directionsDisplay.setDirections(response);
+            }
+        });
+
+        google.maps.event.addListener(directionsDisplay, 'directions_changed', function () {
+            computeTotalDistance1(directionsDisplay.directions);
+        });
+
+        function computeTotalDistance1(result) {
+            var total = 0;
+            var time = 0;
+            var from = 0;
+            var to = 0;
+            var myroute = result.routes[0];
+            for (var i = 0; i < myroute.legs.length; i++) {
+                total += myroute.legs[i].distance.value;
+                time += myroute.legs[i].duration.text;
+                from = myroute.legs[i].start_address;
+                to = myroute.legs[i].end_address;
+            }
+            time = time.replace('hours', 'H');
+            time = time.replace('mins', 'M');
+            total = total *0.00062137;
+            console.log(total);
+            document.getElementById('durationRec').innerHTML = 'Time Taken' + '=' + time;
+            document.getElementById('totalRec').innerHTML = 'Total Distance' + '=' + Math.round(total) + "Mi";
+        }
+    }
+
+}());
+
+</script>
+
+</head> 
+
+<body>
+
+<div data-role="page" id="pageActivity" data-theme='b'>
+<div data-role="panel" data-display="push" id="sidebar" data-theme="a">
+	             <ul data-role="listview">
+	                     	<li data-icon='false'><a data-ajax="false" href="volactivitypage.html"><i class="fa fa-home fa-fw"></i>Home</a></li>
+							<li data-icon='false'><a data-ajax="false" href="about.html"><i class="fa fa-file-o fa-fw"></i>About</a></li>
+							<li data-icon='false'><a data-ajax="false" href="volunteerhistory.html"><i class="fa fa-clock-o fa-fw"></i>History</a></li>
+							<li data-icon='false' class="menu-item-has-children"><a href="#"><i class="fa fa-exchange fa-fw"></i>Contact Us</a>
+								<ul data-role="listview" class="sub-menu">
+									<li data-icon='false'><a data-ajax="false" href="mailto:cmpe295asjsu@gmail.com"><i class="fa fa-envelope fa-fw"></i>Email</a></li>
+									<li data-icon='false'><a data-ajax="false" href="tel:4088169958"><i class="fa fa-phone fa-fw"></i>Call</a></li>
+								</ul>
+							</li>
+						
+							<li data-icon='false' class="menu-item-has-children"><a href="#"><i class="fa fa-user fa-fw"></i>Tell Friends</a>
+								<ul data-role="listview" class="sub-menu">
+									<li data-icon='false'><a data-ajax="false" href="#"><i class="fa fa-facebook fa-fw"></i>Facebook</a></li>
+									<li data-icon='false'><a data-ajax="false" href="#"><i class="fa fa-twitter fa-fw"></i>Twitter</a></li>
+								</ul>						
+							</li>
+							<li data-icon='false'><a data-ajax="false" href="logout.html"><i class="fa fa-key fa-fw"></i>Logout</a></li>
+				</ul>                         
+	         </div>
+<!--HEADER OF PAGE-->
+	         <div data-role="header" data-tap-toggle="false" data-theme='b'>
+			 <a href='#sidebar' data-role="none"><img src="img/menu-icon.png" alt="sidebar" id="header-menu-icon" /></a>
+	             <h1 class="header-title">Food For All</h1>	            
+	         </div>
+
+<!-- CONTENT of PAGE-->
+
+<div data-role="content">
+
+		<div data-role="none" id="main-slider" class="owl-carousel">
+
+                    <div class="item">
+
+                      <img src="img/assets/blog-1.jpg" alt="pic1">
+
+                      <div class="text">
+
+                          <h1>Food for all</h1>
+
+                          <h2>Let's join hands to help prevent hunger</h2>
+
+                      </div>
+
+                    </div>
+
+                    <div class="item">
+
+                      <img src="img/assets/blog-2.jpg" alt="pic2">
+
+                      <div class="text">
+
+                          <h1></h1>
+
+                          <h2>Stop food wastage and help the hungry!</h2>
+
+                      </div>
+
+                    </div>
+
+    
+
+                    <div class="item">
+
+                      <img src="img/assets/blog-3.jpg" alt="pic3">
+
+                      <div class="text">
+
+                          <h1>Food for all</h1>
+
+                          <h2>Donate or Volunteer to transfer food</h2>
+
+                      </div>
+
+                    </div>
+
+    
+
+                    <div class="item">
+
+                      <img src="img/assets/blog-4.jpg" alt="pic4">
+
+                      <div class="text">
+
+                          <h1>Food for all</h1>
+
+                          <h2>Channelising excess food to help a needy</h2>
+
+                      </div>
+
+                    </div>
+
+                </div>
+
+
+
+    <!-- div created to contain donation request details-->
+
+    <div data-role="none" id="accept">
+
+
+
+        </div>
+
+</div>
+
+<!--FOOTER OF PAGE-->
+
+ <div data-role="footer" data-theme="none" data-border="false">
+
+	<div style="text-align:center;">
+
+				<img src="img/assets/logo.jpg" alt="logo" width="145" />
+
+				</div>
+
+            </div>
+
+			<div data-role="footer" data-position="fixed" data-border="false" data-tap-toggle="false">
+
+            	<div data-role="navbar">
+
+            		<ul>
+
+            			<li><a href="contact.php"><i class="fa fa-map-marker fa-fw"></i><span>Map</span></a></li>
+
+            			<li><a href="tel:123456789"><i class="fa fa-phone fa-fw"></i><span>Call</span></a></li>
+
+            			<li><a href="mailto:cmpe295asjsu@gmail.com"><i class="fa fa-envelope fa-fw"></i><span>E-mail</span></a></li>
+
+            			<li><a href="https://www.facebook.com/lukepostulka"><i class="fa fa-facebook fa-fw"></i><span>Facebook </span></a></li>
+
+            			<li><a href="https://twitter.com/lukepostulka"><i class="fa fa-twitter fa-fw"></i><span>Twitter</span></a></li>
+
+            		</ul>
+
+            	</div>
+
+            </div>
+
+</body>
+
+</html>
